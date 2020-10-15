@@ -11,7 +11,13 @@ import SwiftUI
 struct sixminApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            HomeView(lessons: lessons)
         }
+    }
+}
+
+struct sixminApp_Previews: PreviewProvider {
+    static var previews: some View {
+        HomeView(lessons: lessons)
     }
 }
