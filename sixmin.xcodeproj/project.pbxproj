@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		FB2A98D7253D307E00A0936B /* ImageFromURL.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2A98D6253D307E00A0936B /* ImageFromURL.swift */; };
+		FB2A98F1253D403F00A0936B /* ImageCache.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = FB2A98EF253D403F00A0936B /* ImageCache.xcdatamodeld */; };
+		FB2A98F6253D406A00A0936B /* ImageCache.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB2A98F5253D406A00A0936B /* ImageCache.swift */; };
+		FB76E3C12538513100C4F7F7 /* APIServices.swift in Sources */ = {isa = PBXBuildFile; fileRef = FB76E3C02538513100C4F7F7 /* APIServices.swift */; };
+		FBD4F682253961D4007CE01B /* Loading.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBD4F681253961D4007CE01B /* Loading.swift */; };
 		FBE1FC4A2536ED51004D45FB /* sixminApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1FC492536ED51004D45FB /* sixminApp.swift */; };
 		FBE1FC4C2536ED51004D45FB /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = FBE1FC4B2536ED51004D45FB /* ContentView.swift */; };
 		FBE1FC4E2536ED54004D45FB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FBE1FC4D2536ED54004D45FB /* Assets.xcassets */; };
@@ -35,6 +40,11 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		FB2A98D6253D307E00A0936B /* ImageFromURL.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageFromURL.swift; sourceTree = "<group>"; };
+		FB2A98F0253D403F00A0936B /* ImageCache.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = ImageCache.xcdatamodel; sourceTree = "<group>"; };
+		FB2A98F5253D406A00A0936B /* ImageCache.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCache.swift; sourceTree = "<group>"; };
+		FB76E3C02538513100C4F7F7 /* APIServices.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIServices.swift; sourceTree = "<group>"; };
+		FBD4F681253961D4007CE01B /* Loading.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Loading.swift; sourceTree = "<group>"; };
 		FBE1FC462536ED51004D45FB /* sixmin.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = sixmin.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FBE1FC492536ED51004D45FB /* sixminApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = sixminApp.swift; sourceTree = "<group>"; };
 		FBE1FC4B2536ED51004D45FB /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -76,6 +86,40 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		FB2A98DE253D3F1A00A0936B /* Reposity */ = {
+			isa = PBXGroup;
+			children = (
+				FB2A98E8253D3F9100A0936B /* Coredata */,
+			);
+			path = Reposity;
+			sourceTree = "<group>";
+		};
+		FB2A98E8253D3F9100A0936B /* Coredata */ = {
+			isa = PBXGroup;
+			children = (
+				FB2A98EF253D403F00A0936B /* ImageCache.xcdatamodeld */,
+				FB2A98F5253D406A00A0936B /* ImageCache.swift */,
+			);
+			path = Coredata;
+			sourceTree = "<group>";
+		};
+		FB76E3BF2538511500C4F7F7 /* Api */ = {
+			isa = PBXGroup;
+			children = (
+				FB76E3C02538513100C4F7F7 /* APIServices.swift */,
+			);
+			path = Api;
+			sourceTree = "<group>";
+		};
+		FBD4F680253961C2007CE01B /* Component */ = {
+			isa = PBXGroup;
+			children = (
+				FBD4F681253961D4007CE01B /* Loading.swift */,
+				FB2A98D6253D307E00A0936B /* ImageFromURL.swift */,
+			);
+			path = Component;
+			sourceTree = "<group>";
+		};
 		FBE1FC3D2536ED51004D45FB = {
 			isa = PBXGroup;
 			children = (
@@ -99,6 +143,9 @@
 		FBE1FC482536ED51004D45FB /* sixmin */ = {
 			isa = PBXGroup;
 			children = (
+				FB2A98DE253D3F1A00A0936B /* Reposity */,
+				FBD4F680253961C2007CE01B /* Component */,
+				FB76E3BF2538511500C4F7F7 /* Api */,
 				FBE1FC7A2536EE22004D45FB /* Scene */,
 				FBE1FC492536ED51004D45FB /* sixminApp.swift */,
 				FBE1FC4B2536ED51004D45FB /* ContentView.swift */,
@@ -293,6 +340,11 @@
 				FBE1FC4C2536ED51004D45FB /* ContentView.swift in Sources */,
 				FBE1FC862536FE66004D45FB /* HomeCell.swift in Sources */,
 				FBE1FC4A2536ED51004D45FB /* sixminApp.swift in Sources */,
+				FBD4F682253961D4007CE01B /* Loading.swift in Sources */,
+				FB76E3C12538513100C4F7F7 /* APIServices.swift in Sources */,
+				FB2A98F1253D403F00A0936B /* ImageCache.xcdatamodeld in Sources */,
+				FB2A98F6253D406A00A0936B /* ImageCache.swift in Sources */,
+				FB2A98D7253D307E00A0936B /* ImageFromURL.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -612,6 +664,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		FB2A98EF253D403F00A0936B /* ImageCache.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				FB2A98F0253D403F00A0936B /* ImageCache.xcdatamodel */,
+			);
+			currentVersion = FB2A98F0253D403F00A0936B /* ImageCache.xcdatamodel */;
+			path = ImageCache.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = FBE1FC3E2536ED51004D45FB /* Project object */;
 }

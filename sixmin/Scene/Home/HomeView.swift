@@ -8,41 +8,34 @@
 import SwiftUI
 
 struct HomeView: View {
-    let lessons : [Lesson]
+    @ObservedObject var homeViewModel = HomeViewModel()
     var body: some View {
         NavigationView{
-            List(lessons ){ lesson in
-                HomeCell(lesson: lesson)
-                    .frame(minWidth: 0, maxWidth: .infinity)
-            }.frame(minWidth: 0, maxWidth:  .infinity)
-            .navigationBarTitle(Text("Why"))
+            List{
+                ForEach(homeViewModel.articles){ article in
+                    HomeCell(article: article)
+                        .frame(minWidth: 0, maxWidth: .infinity)
+                }
+            }
+            .navigationTitle(Text("Why?"))
+            
         }
-    
+        .onAppear(perform: {
+            ApiServices.getTopHeadLines { article in
+                DispatchQueue.main.async {
+                    self.homeViewModel.articles = article
+                }
+            }
+        })
+        
     }
+}
+class HomeViewModel: ObservableObject {
+    @Published var articles : [Article] = []
 }
 
 struct HomeView_Previews: PreviewProvider {
     static var previews: some View {
-        HomeView(lessons: lessons)
+        HomeView()
     }
 }
-
-struct Lesson: Identifiable {
-    let id = UUID()
-    let image: String
-    let title: String
-    let subTitle: String
-}
-let lessons = [
-    Lesson(image: "photo", title:"Coronavirus: Dealing with m unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi"),
-    Lesson(image: "photo", title:"Coronavirus: Dealing with mass unemployment" , subTitle: "The coronavi")
-    
-]
-
