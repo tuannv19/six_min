@@ -1,46 +1,39 @@
-//
-//  APIServices.swift
-//  sixmin
-//
-//  Created by tuan.nguyenv on 10/15/20.
-//
+
 
 import Foundation
+import Combine
 //https://newsapi.org/v2/top-headlines?country=us&apiKey=15aea5edc0944e75910d5a2cfb35dfec
 //https://newsapi.org/v2/everything?q=bitcoin&apiKey=15aea5edc0944e75910d5a2cfb35dfec
 //https://newsapi.org/v2/sources?apiKey=15aea5edc0944e75910d5a2cfb35dfec
 
 class ApiServices {
     private static let apiKey = "15aea5edc0944e75910d5a2cfb35dfec"
-    private let baseAPI = "https://newsapi.org/v2/"
+    private static let baseAPI = "https://newsapi.org/v2/"
+    
+    private static let sessionProcessingQueue = DispatchQueue(label: "sixmin.queue")
     
     enum path : String {
         case topHeadLines = "top-headlines"
         case everything = "everything"
         case sources = "sources"
+        
+        var url: URL  {
+            return URL(string: "\(ApiServices.baseAPI)\(self.rawValue)?country=us&apiKey=\(ApiServices.apiKey)")!
+        }
     }
     
     private static let session = URLSession(configuration: URLSessionConfiguration.default)
     
 }
 extension ApiServices{
-    static func getTopHeadLines( completion: @escaping ([Article]) -> Void){
-        let url  = URL(string: "https://newsapi.org/v2/top-headlines?country=us&apiKey=15aea5edc0944e75910d5a2cfb35dfec")
-        let task  = session.dataTask(with: url!) { (data, response, error) in
+     func fetch<T: Decodable>(path: ApiServices.path) -> AnyPublisher<T, Error>{
+          return ApiServices.session.dataTaskPublisher(for: path.url)
+            .receive(on: RunLoop.main)
+            .subscribe(on: Self.sessionProcessingQueue)
+            .map( {return $0.data})
+            .decode(type: T.self, decoder: JSONDecoder())
+            .eraseToAnyPublisher()
             
-            if let error = error {
-                
-            }
-            else if let reponse = response {
-                
-            }
-            if let data = data {
-                let article = try! JSONDecoder().decode(Articles.self, from: data)
-                completion(article.articles)
-            }
-        }
-        task.resume()
-    
     }
     static func getEveryThing(){
         
@@ -54,8 +47,13 @@ struct Articles: Decodable {
     let articles : [Article]
 }
 struct Article: Decodable , Identifiable{
+struct Source: Decodable {
+    let id: String?
+    let name : String?
+    
+}
     let id = UUID()
-    let source : Source
+    let source : Article.Source
     let author: String?
     let title: String?
     let description: String?
@@ -63,10 +61,38 @@ struct Article: Decodable , Identifiable{
     let urlToImage: String?
     let publishedAt: String?
     let content: String?
-}
-
-struct Source: Decodable {
-    let id: String?
-    let name : String?
     
 }
+
+
+
+
+struct Source: Codable {
+    let sources: [SourceElement]
+
+    // MARK: - SourceElement
+struct SourceElement: Codable {
+    let id, name, sourceDescription: String
+    let url: String
+    let category: Category
+    let language, country: String
+
+    enum CodingKeys: String, CodingKey {
+        case id, name
+        case sourceDescription = "description"
+        case url, category, language, country
+    }
+}
+
+enum Category: String, Codable {
+    case business = "business"
+    case entertainment = "entertainment"
+    case general = "general"
+    case health = "health"
+    case science = "science"
+    case sports = "sports"
+    case technology = "technology"
+}
+
+}
+

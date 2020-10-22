@@ -27,7 +27,7 @@ struct sixminApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
-            HomeView()
+            MainTab()
         }
         .onChange(of: scenePhase) { (newScenePhase) in
             switch newScenePhase{
@@ -44,8 +44,3 @@ struct sixminApp: App {
     }
 }
 
-struct sixminApp_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}

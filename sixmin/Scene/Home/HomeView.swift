@@ -1,41 +1,65 @@
-//
-//  HomeView.swift
-//  sixmin
-//
-//  Created by tuan.nguyenv on 10/14/20.
-//
 
 import SwiftUI
 
 struct HomeView: View {
-    @ObservedObject var homeViewModel = HomeViewModel()
+    @ObservedObject var homeViewModel : HomeViewModel
+    
+    init(model: HomeViewModel) {
+        self.homeViewModel = model
+    }
+    
     var body: some View {
         NavigationView{
             List{
                 ForEach(homeViewModel.articles){ article in
-                    HomeCell(article: article)
-                        .frame(minWidth: 0, maxWidth: .infinity)
+                    ZStack {
+                        HomeCell(article: article)
+                            .padding(.top, 10)
+                        NavigationLink(destination: WebPage(viewModel: ViewModel(url: article.url!))) {
+                            EmptyView()
+                        }
+                        .buttonStyle(PlainButtonStyle())
+                    }.animation(nil)
                 }
             }
-            .navigationTitle(Text("Why?"))
-            
+            .navigationTitle(Text("Headlines"))
         }
         .onAppear(perform: {
-            ApiServices.getTopHeadLines { article in
-                DispatchQueue.main.async {
-                    self.homeViewModel.articles = article
-                }
-            }
+            homeViewModel.fetch()
         })
         
     }
 }
+
+import Combine
 class HomeViewModel: ObservableObject {
     @Published var articles : [Article] = []
+    private var disposables = Set<AnyCancellable>()
+    
+    var path : ApiServices.path
+    var service: ApiServices
+    
+    init(path: ApiServices.path, service: ApiServices = ApiServices()) {
+        self.path = path
+        self.service = service
+    }
+    
+    func fetch() {
+        service.fetch(path: path).sink { (completion) in
+            switch completion {
+            case .failure(let error):
+                print(error)
+            case.finished:
+                break
+            }
+        } receiveValue: { (articles: Articles) in
+            self.articles = articles.articles
+        }
+        .store(in: &disposables)
+        
+        
+    }
+    
 }
 
-struct HomeView_Previews: PreviewProvider {
-    static var previews: some View {
-        HomeView()
-    }
-}
+

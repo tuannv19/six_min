@@ -1,21 +1,17 @@
-//
-//  Loading.swift
-//  sixmin
-//
-//  Created by tuan.nguyenv on 10/16/20.
-//
-
 import SwiftUI
 
 struct Loading: View {
+    @State private var isLoading = false
+ 
     var body: some View {
-        Image("photo")
-            .animation(/*@START_MENU_TOKEN@*/.easeIn/*@END_MENU_TOKEN@*/)
-    }
-}
-
-struct Loading_Previews: PreviewProvider {
-    static var previews: some View {
-        Loading()
+        Circle()
+            .trim(from: 0, to: 0.7)
+            .stroke(Color.green, lineWidth: 5)
+            .frame(width: 100, height: 100)
+            .rotationEffect(Angle(degrees: isLoading ? 360 : 0))
+            .animation(Animation.default.repeatForever(autoreverses: false))
+            .onAppear() {
+                self.isLoading = true
+            }
     }
 }
