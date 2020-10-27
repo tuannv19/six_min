@@ -18,7 +18,14 @@ class ApiServices {
         case sources = "sources"
         
         var url: URL  {
-            return URL(string: "\(ApiServices.baseAPI)\(self.rawValue)?country=us&apiKey=\(ApiServices.apiKey)")!
+            switch self {
+            case .sources, .topHeadLines:
+                return URL(string: "\(ApiServices.baseAPI)\(self.rawValue)?country=us&apiKey=\(ApiServices.apiKey)")!
+            case .everything:
+                return URL(string: "\(ApiServices.baseAPI)\(self.rawValue)?q=bitcoin&apiKey=\(ApiServices.apiKey)")!
+                
+            }
+            
         }
     }
     
@@ -26,14 +33,14 @@ class ApiServices {
     
 }
 extension ApiServices{
-     func fetch<T: Decodable>(path: ApiServices.path) -> AnyPublisher<T, Error>{
-          return ApiServices.session.dataTaskPublisher(for: path.url)
+    func fetch<T: Decodable>(path: ApiServices.path) -> AnyPublisher<T, Error>{
+        return ApiServices.session.dataTaskPublisher(for: path.url)
             .receive(on: RunLoop.main)
             .subscribe(on: Self.sessionProcessingQueue)
             .map( {return $0.data})
             .decode(type: T.self, decoder: JSONDecoder())
             .eraseToAnyPublisher()
-            
+        
     }
     static func getEveryThing(){
         
@@ -47,12 +54,12 @@ struct Articles: Decodable {
     let articles : [Article]
 }
 struct Article: Decodable , Identifiable{
-struct Source: Decodable {
-    let id: String?
-    let name : String?
-    
-}
-    let id = UUID()
+    struct Source: Decodable {
+        let id: String?
+        let name : String?
+        
+    }
+    var id : UUID {UUID()}
     let source : Article.Source
     let author: String?
     let title: String?
@@ -63,36 +70,63 @@ struct Source: Decodable {
     let content: String?
     
 }
-
+extension Article : CellModel {
+    var cellTitle: String {
+        title ?? ""
+    }
+    
+    var cellURLToImage: String? {
+        urlToImage
+    }
+    
+    var cellContent: String {
+        content ?? ""
+    }
+}
 
 
 
 struct Source: Codable {
     let sources: [SourceElement]
-
+    
     // MARK: - SourceElement
-struct SourceElement: Codable {
-    let id, name, sourceDescription: String
-    let url: String
-    let category: Category
-    let language, country: String
-
-    enum CodingKeys: String, CodingKey {
-        case id, name
-        case sourceDescription = "description"
-        case url, category, language, country
+    struct SourceElement: Codable, Identifiable {
+        let id, name, sourceDescription: String
+        let url: String
+        let category: Category
+        let language, country: String
+        
+        enum CodingKeys: String, CodingKey {
+            case id, name
+            case sourceDescription = "description"
+            case url, category, language, country
+        }
     }
+    
+    enum Category: String, Codable {
+        case business = "business"
+        case entertainment = "entertainment"
+        case general = "general"
+        case health = "health"
+        case science = "science"
+        case sports = "sports"
+        case technology = "technology"
+    }
+    
 }
 
-enum Category: String, Codable {
-    case business = "business"
-    case entertainment = "entertainment"
-    case general = "general"
-    case health = "health"
-    case science = "science"
-    case sports = "sports"
-    case technology = "technology"
+extension Source.SourceElement : CellModel {
+    var cellTitle: String {
+        name
+    }
+    
+    var cellURLToImage: String? {
+        nil
+    }
+    
+    var cellContent: String {
+        self.sourceDescription
+    }
+    
+    
 }
-
-}
-

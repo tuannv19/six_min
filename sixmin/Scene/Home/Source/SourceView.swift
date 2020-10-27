@@ -1,44 +1,46 @@
 
 import SwiftUI
 
-struct HomeView: View {
-    @ObservedObject var homeViewModel : HomeViewModel
+struct SourceView: View {
+    @ObservedObject var viewModel : SourceViewModel
     
-    init(model: HomeViewModel) {
-        self.homeViewModel = model
+    init(model: SourceViewModel) {
+        self.viewModel = model
     }
     
     var body: some View {
         NavigationView{
             List{
-                ForEach(homeViewModel.articles){ article in
+                ForEach(self.viewModel.itemValues){ article in
                     ZStack {
-                        HomeCell(article: article)
+                        HomeCell(model: article)
                             .padding(.top, 10)
-                        NavigationLink(destination: WebPage(viewModel: ViewModel(url: article.url!))) {
+                        NavigationLink(destination: WebPage(viewModel: ViewModel(url: article.url))) {
                             EmptyView()
                         }
                         .buttonStyle(PlainButtonStyle())
                     }.animation(nil)
                 }
             }
-            .navigationTitle(Text("Headlines"))
+            .navigationTitle(Text(viewModel.path.rawValue))
         }
         .onAppear(perform: {
-            homeViewModel.fetch()
+            viewModel.fetch()
         })
         
     }
 }
 
 import Combine
-class HomeViewModel: ObservableObject {
-    @Published var articles : [Article] = []
-    private var disposables = Set<AnyCancellable>()
+class SourceViewModel: ObservableObject {
     
-    var path : ApiServices.path
+    @Published var itemValues : [Source.SourceElement] = []
+    
+    var disposables: Set<AnyCancellable> = Set<AnyCancellable>()
+
     var service: ApiServices
-    
+    var path: ApiServices.path
+
     init(path: ApiServices.path, service: ApiServices = ApiServices()) {
         self.path = path
         self.service = service
@@ -52,14 +54,9 @@ class HomeViewModel: ObservableObject {
             case.finished:
                 break
             }
-        } receiveValue: { (articles: Articles) in
-            self.articles = articles.articles
+        } receiveValue: { [weak self] (articles: Source) in
+            self?.itemValues = articles.sources
         }
         .store(in: &disposables)
-        
-        
     }
-    
 }
-
-

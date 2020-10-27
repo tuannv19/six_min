@@ -3,14 +3,22 @@ import SwiftUI
 
 struct MainTab: View {
     var body: some View {
+        
         TabView{
-            HomeView(model: HomeViewModel(path: ApiServices.path.topHeadLines))
-                .tabItem { Text("Head lines") }
-            HomeView(model: HomeViewModel(path: ApiServices.path.topHeadLines))
-                .tabItem { Text("Everything") }
-            HomeView(model: HomeViewModel(path: ApiServices.path.topHeadLines))
-                .tabItem { Text("Source") }
+            NavigationView{
+                HeadLineView(model: HeadLineViewModel(path: ApiServices.path.topHeadLines))
+            }
+            .tabItem { Text("1").tag(0) }.id(UUID())
+            NavigationView{
+                HeadLineView(model: HeadLineViewModel(path: ApiServices.path.topHeadLines))
+            }
+            .tabItem { Text("1").tag(1) }.id(UUID())
+            NavigationView{
+                HeadLineView(model: HeadLineViewModel(path: ApiServices.path.topHeadLines))
+            }
+            .tabItem { Text("1").tag(2) }.id(UUID())
         }
+        
     }
 }
 

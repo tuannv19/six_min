@@ -12,7 +12,6 @@ struct WebPage: View {
     var body: some View {
         WebView(viewModel: viewModel)
             .onAppear(perform: {
-                
             })
     }
 }
